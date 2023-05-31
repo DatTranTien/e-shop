@@ -175,7 +175,8 @@ export default function ProductDetails({route:{params}}) {
                     height:25,
                     width:25,
                     textAlignVertical:"center",
-                    textAlign:"center"
+                    textAlign:"center",
+                    borderRadius:10
                 }}>
                     {quantity}
                 </Text>

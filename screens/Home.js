@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import SearchBar from '../components/SearchBar';
 import ProductCard from '../components/ProductCard';
 import Footer from '../components/Footer';
+import Heading from '../components/Heading';
 
 
 
@@ -91,10 +92,7 @@ export default function Home() {
       alignItems:"center"
       }
       }>
-      <View>
-        <Text style={{fontSize:25}}>Our</Text>
-        <Text style={{fontSize:25,fontWeight:"900"}}>Product</Text>
-      </View>
+      <Heading/>
       <View>
         <TouchableOpacity
         onPress={()=>setActiveSearch(true)}
