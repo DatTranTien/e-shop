@@ -5,8 +5,8 @@ import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
 
-export default function Login({navigation}) {
-  const [email, setEmail] = useState("")
+export default function ChangePassword({navigation}) {
+  const [oldPass, setOldPass] = useState("")
   const [pass, setPass] = useState("")
   const navigate =useNavigation() 
   const imputOptions={
@@ -17,14 +17,14 @@ export default function Login({navigation}) {
   return (
     <View style={[defaultStyle,{backgroundColor:colors.color2}]}>
       <View style={{marginBottom:20}}>
-        <Text style={styles.heading}>Login</Text>
+        <Text style={styles.heading}>Change Password</Text>
       </View>
       <View style={styles.container}>
         <TextInput style={{...imputOptions}} 
         placeholder="Email"
         keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
+        value={oldPass}
+        onChangeText={setOldPass}
         />
         <TextInput style={{...imputOptions,marginTop:15}} 
         placeholder="Password"
@@ -33,50 +33,24 @@ export default function Login({navigation}) {
         onChangeText={setPass}
         />
 
+
+
         <TouchableOpacity 
-        onPress={()=>navigation.navigate("forgetpassword")}
-        >
-          <Text style={styles.forget}>
-            Forget Password
-          </Text>
-        </TouchableOpacity>
-
-
-
-        <TouchableOpacity onPress={()=>navigate.navigate("confirmoder")}>
+        style={{
+            marginTop:20
+        }}
+        onPress={()=>navigate.navigate("confirmoder")}>
         <Button
-        disabled={email==""|| password == ""}
+        disabled={oldPass==""|| pass == ""}
         textColor={colors.color3}
         style={{
           backgroundColor:colors.color2,
-          borderRadius:100,
+          borderRadius:100
           // padding:5,
         }}>
          <Text style={{
           color:colors.color1
-         }}> ĐĂNG NHẬP</Text>
-        </Button>
-      </TouchableOpacity>
-
-      <Text style={{
-          alignSelf:"center",
-          fontSize:20,
-          fontWeight:"600",
-          color:colors.color2,
-          margin:30
-          }}>OR</Text>
-
-<TouchableOpacity onPress={()=>navigate.navigate("signup")}>
-        <Button
-        disabled={email==""|| pass == ""}
-        style={{
-          backgroundColor:colors.color2,
-          // borderRadius:100,
-          // padding:5
-        }}>
-          <Text style={{
-            color:colors.color1,
-          }}>ĐĂNG KÝ</Text>
+         }}>Reset</Text>
         </Button>
       </TouchableOpacity>
       </View>

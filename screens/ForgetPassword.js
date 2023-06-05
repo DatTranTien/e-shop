@@ -5,7 +5,7 @@ import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
 
-export default function Login({navigation}) {
+export default function ForgetPassword({navigation}) {
   const [email, setEmail] = useState("")
   const [pass, setPass] = useState("")
   const navigate =useNavigation() 
@@ -17,48 +17,32 @@ export default function Login({navigation}) {
   return (
     <View style={[defaultStyle,{backgroundColor:colors.color2}]}>
       <View style={{marginBottom:20}}>
-        <Text style={styles.heading}>Login</Text>
+        <Text style={styles.heading}>Quên mật khẩu</Text>
       </View>
       <View style={styles.container}>
-        <TextInput style={{...imputOptions}} 
+        <TextInput style={{...imputOptions,marginBottom:20}} 
         placeholder="Email"
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
         />
-        <TextInput style={{...imputOptions,marginTop:15}} 
-        placeholder="Password"
-        keyboardType="email-address"
-        value={pass}
-        onChangeText={setPass}
-        />
 
-        <TouchableOpacity 
-        onPress={()=>navigation.navigate("forgetpassword")}
-        >
-          <Text style={styles.forget}>
-            Forget Password
-          </Text>
-        </TouchableOpacity>
-
-
-
-        <TouchableOpacity onPress={()=>navigate.navigate("confirmoder")}>
+        <TouchableOpacity onPress={()=>navigate.navigate("verify")}>
         <Button
         disabled={email==""|| password == ""}
         textColor={colors.color3}
         style={{
-          backgroundColor:colors.color2,
+          backgroundColor:colors.color1,
           borderRadius:100,
           // padding:5,
         }}>
          <Text style={{
-          color:colors.color1
-         }}> ĐĂNG NHẬP</Text>
+          color:colors.color2
+         }}>Lấy Mã OTP</Text>
         </Button>
       </TouchableOpacity>
 
-      <Text style={{
+      {/* <Text style={{
           alignSelf:"center",
           fontSize:20,
           fontWeight:"600",
@@ -66,9 +50,9 @@ export default function Login({navigation}) {
           margin:30
           }}>OR</Text>
 
-<TouchableOpacity onPress={()=>navigate.navigate("signup")}>
+<TouchableOpacity onPress={()=>navigate.navigate("login")}>
         <Button
-        disabled={email==""|| pass == ""}
+        disabled={email==""|| password == ""}
         style={{
           backgroundColor:colors.color2,
           // borderRadius:100,
@@ -76,9 +60,9 @@ export default function Login({navigation}) {
         }}>
           <Text style={{
             color:colors.color1,
-          }}>ĐĂNG KÝ</Text>
+          }}>ĐĂNG NHẬP</Text>
         </Button>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       </View>
 
       
@@ -104,11 +88,13 @@ const styles = StyleSheet.create({
     alignSelf:"flex-end"
   },
   container:{
-    backgroundColor:colors.color1,
+    backgroundColor:colors.color2,
     height:"80%",
     justifyContent:"center",
     borderRadius:15,
     marginBottom:"10%",
-    paddingHorizontal:10
+    paddingHorizontal:10,
+    borderColor:colors.color1,
+    borderWidth:2
   }
 })

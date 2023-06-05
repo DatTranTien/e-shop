@@ -60,7 +60,7 @@ export default function Footer({activeRoute="home"}) {
             style={{
                 backgroundColor:colors.color1
             }}
-            icon={activeRoute === "profile"?"account":"account-outline"}
+            icon={isAuthenticated? "login": activeRoute === "profile"?"account":"account-outline"}
             />
 
         </TouchableOpacity>

@@ -13,7 +13,8 @@ export default function Payment({navigation,route }) {
         navigation.navigate("login")
     }
     const codHandler=()=>{
-
+      console.log("first")
+navigation.navigate("login")
     }
     const onlineHandler=()=>{
 
