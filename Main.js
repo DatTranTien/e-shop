@@ -21,6 +21,7 @@ import AdminOrders from './screens/Admin/AdminOrders';
 import UpdateProduct from './screens/Admin/UpdateProduct';
 import NewProduct from './screens/Admin/NewProduct';
 import ProductImages from './screens/Admin/ProductImages';
+import CameraComponent from './screens/Admin/CameraComponent';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ export default function Main() {
       <Stack.Screen name="updateproduct" component={UpdateProduct} />
       <Stack.Screen name="newproduct" component={NewProduct} />
       <Stack.Screen name="productimages" component={ProductImages} />
+      <Stack.Screen name="camera" component={CameraComponent} />
     </Stack.Navigator>
     <Toast position="top" bottomOffset={20} />
     </>

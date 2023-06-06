@@ -1,5 +1,5 @@
 import {  ScrollView, StyleSheet, Text, TouchableOpacity, View,Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import { colors, defaultStyle } from '../../styles/styles'
 import Loader from '../../components/Loader'
@@ -20,6 +20,12 @@ export default function ProductImages({ route, navigation }) {
     const submitHandler = () => {
 
     }
+    useEffect(() => {
+        if (route.params?.image) {
+          setImage(route.params.image)
+          setImageChanged(true)
+        }
+        }, [route.params])
     return (
         <View style={{ ...defaultStyle,backgroundColor:colors.color5 }}>
             <Header back={true} />
@@ -40,7 +46,7 @@ export default function ProductImages({ route, navigation }) {
                         minHeight: 400
                     }}
                 >
-                    {route.params.images.map((i) => (
+                    {route.params.images?.map((i) => (
                         <ImageCard
                             key={i._id}
                             src={i.url}

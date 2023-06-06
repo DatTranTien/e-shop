@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { colors, defaultStyle } from '../styles/styles'
 import { Avatar, Button } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
@@ -14,12 +14,17 @@ const user = {
     email:"dat@gmail.com"
 }
 const loading=false
-export default function Profile({navigation}) {
+export default function Profile({navigation,route}) {
     const [avatar, setAvatar] = useState("")
     const navigate=useNavigation()
 const logoutHandler=()=>{
     console.log("signing out")
 }
+useEffect(() => {
+    if (route.params?.image) {
+        setAvatar(route.params.image)
+    }
+    }, [route.params])
 
 
 

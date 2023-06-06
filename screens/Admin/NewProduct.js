@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import { colors, defaultStyle } from '../../styles/styles'
 import Loader from '../../components/Loader'
@@ -26,6 +26,12 @@ export default function NewProduct({navigation,route}) {
     const submitHandler =()=>{
 
     }
+    useEffect(() => {
+    if (route.params?.image) {
+      setImage(route.params.image)
+    }
+    }, [route.params])
+    
   return (
     <>
     <View style={{...defaultStyle}}>
@@ -55,7 +61,7 @@ backgroundColor:colors.color3
         width:80,
         height:80,
         alignSelf:"center",
-        marginBottom:20
+        marginBottom:20,
       }}>
         <Avatar.Image
         size={80}
@@ -66,19 +72,22 @@ backgroundColor:colors.color3
           uri: image?image:null
         }}
         />
-        <Button onPress={()=>navigation.navigate("camera",{newProduct:true})}>
+        <TouchableOpacity
+        onPress={()=>navigation.navigate("camera",{newProduct:true})}>
           <Avatar.Icon
           size={30}
           icon={'camera'}
           color={colors.color3}
           style={{
+            backgroundColor:"cyan",
             backgroundColor:colors.color2,
             position:"absolute",
             bottom:0,
-            right:-5
+            right:-5,
+            zIndex:1
           }}
           />
-        </Button>
+        </TouchableOpacity>
       </View>
 
 

@@ -1,11 +1,11 @@
 import { Alert, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { colors, defaultStyle, inputStyling } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
 
-export default function Signup({navigation}) {
+export default function Signup({navigation,route}) {
   const [avatar, setAvatar] = useState("")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -16,6 +16,12 @@ export default function Signup({navigation}) {
   const [pinCode, setPincode] = useState("")
 
   const navigate =useNavigation()
+
+  useEffect(() => {
+    if (route.params?.image) {
+        setAvatar(route.params.image)
+    }
+    }, [route.params])
 
   const imputOptions={
     style: {
