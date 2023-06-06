@@ -5,22 +5,23 @@ import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
 
+export const inputOptions={
+  style: inputStyling,
+  mode:"outlined",
+  activeOutlineColor:colors.color1
+}
 export default function ForgetPassword({navigation}) {
   const [email, setEmail] = useState("")
   const [pass, setPass] = useState("")
   const navigate =useNavigation() 
-  const imputOptions={
-    style: inputStyling,
-    mode:"outlined",
-    activeOutlineColor:colors.color1
-  }
+
   return (
     <View style={[defaultStyle,{backgroundColor:colors.color2}]}>
       <View style={{marginBottom:20}}>
         <Text style={styles.heading}>Quên mật khẩu</Text>
       </View>
       <View style={styles.container}>
-        <TextInput style={{...imputOptions,marginBottom:20}} 
+        <TextInput style={{...inputOptions,marginBottom:20}} 
         placeholder="Email"
         keyboardType="email-address"
         value={email}

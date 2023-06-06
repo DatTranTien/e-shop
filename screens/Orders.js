@@ -4,9 +4,10 @@ import { colors, defaultStyle } from '../styles/styles'
 import Header from '../components/Header'
 import { Headline } from 'react-native-paper'
 import OrderItem from '../components/OrderItem'
+import Loader from '../components/Loader'
 
 
-const orders=[
+export const orders=[
   {
     _id:"dat1",
     shippingInfo:{
@@ -35,8 +36,11 @@ const orders=[
   },
 ]
 export default function Orders() {
+  const loading=false
   return (
-    <View 
+    loading
+      ? <Loader/>
+      :<View 
     style={{
       ...defaultStyle,
       backgroundColor:colors.color5

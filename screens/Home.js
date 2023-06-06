@@ -22,9 +22,10 @@ const categories=[
   {category:"DAT5",_id:"tran5"},
 ]
 
-const products=[
+export const products=[
   {
     price:213,
+    category:"category1111",
     stock:23,
     name:"Sample 1",
     _id:"lll",
@@ -34,6 +35,7 @@ const products=[
   },
   {
     price:213,
+    category:"category1111",
     stock:23,
     name:"Sample 2",
     _id:"lll",
