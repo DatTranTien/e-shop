@@ -6,6 +6,8 @@ config({
 })
 const user = require('./routes/user.js')
 
+// middlewares
+app.use(express.json())
 
 app.get('/',(req,res,next)=>{
     res.send("start app")
