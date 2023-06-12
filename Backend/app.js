@@ -1,7 +1,9 @@
 const { config } = require("dotenv")
 const express=require("express")
 const { errorHandle } = require("./middlewares/error.js")
+var cookieParser = require('cookie-parser')
 const app=express()
+app.use(cookieParser())
 config({
     path: './data/config.env'
 })
@@ -15,4 +17,5 @@ app.get('/',(req,res,next)=>{
 })
 app.use('/api/v1/user',user)
 app.use(errorHandle)
+
 module.exports = app
