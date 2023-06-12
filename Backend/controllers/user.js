@@ -1,28 +1,26 @@
 const user = require("../models/user")
 const bcrypt = require('bcrypt')
-exports.login =async(req,res,next)=>{
+const ErrorHandler = require("../utils/error")
+const { asyncError } = require("../middlewares/error")
+exports.login = asyncError(async (req,res,next)=>{
     const {email,password}=req.body
     const userInfor=await user.findOne({email}).select('+password').exec()
-    console.log("userInfor--->",userInfor)
     if (!userInfor) {
-        res.status(404).json({
+    return    res.status(404).json({
             success:false,
             message:"Incorrect Email"
         })
     }
     const isMatch= await bcrypt.compare(password,userInfor?.password)
     if(!isMatch){
-        res.status(400).json({
-            success:false,
-            message:"Incorrect password!"
-        })
+      return  next(new ErrorHandler("Incorrect password!",400))
     }
     res.status(200).json({
         success:true,
         message:"Login successful!"
     })
-}
-exports.signup=async(req,res,next)=>{
+})   
+exports.signup= asyncError(async(req,res,next)=>{
     const {name,email,password,address,pinCode,country,city}=req.body
     await user.create({
         name,email,password,address,pinCode,country,city
@@ -31,4 +29,4 @@ exports.signup=async(req,res,next)=>{
         success:true,
         message:"Registered success!"
     })
-}
+})
