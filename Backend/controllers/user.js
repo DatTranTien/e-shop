@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const ErrorHandler = require("../utils/error")
 const { asyncError } = require("../middlewares/error")
 const { sendToken, cookieOptions, sendTokenLogin } = require("../utils/sendToken")
-const { getDataUri } = require("../utils/features")
+const { getDataUri, sendMail } = require("../utils/features")
 const cloudinary=require('cloudinary')
 
 exports.login = asyncError(async (req,res,next)=>{
@@ -74,6 +74,59 @@ exports.getMyProfle=asyncError(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         userInfor
+    })
+})
+exports.forgetPassword=asyncError(async(req,res,next)=>{
+    const {email} = req.body
+    const userInfor=await user.findOne({email})
+
+    if (!userInfor) {
+        return next(new ErrorHandler("Incorrect Email",404))
+    }
+    const randomNumber = Math.random()*(999999-100000)+100000
+    const otp = Math.floor(randomNumber)
+    const otp_expire=15*60*1000
+    
+    userInfor.otp = otp
+    userInfor.otp_expire = new Date(Date.now()+ otp_expire)
+    await userInfor.save()
+
+    try {
+    await    sendMail("OTP for reseting password", userInfor.email, `Your OTP Is ${otp}`)
+    } catch (error) {
+        userInfor.otp=null
+        userInfor.otp_expire=null
+        await userInfor.save()
+        return next(error)
+    }
+    res.status(200).json({
+        success:true,
+        message:`Email sent to ${userInfor.email}`
+    })
+})
+exports.resetPassword=asyncError(async(req,res,next)=>{
+    const {otp,newPassword} = req.body
+    const userInfor=await user.findOne({
+        otp,
+        otp_expire:{
+            $gt:Date.now()
+        }
+    })
+
+    if (!userInfor) {
+        return next(new ErrorHandler("Incorrect OTP or has been expired",400))
+    }
+    if (!newPassword) {
+        return next(new ErrorHandler("Please enter new password",400))
+    }
+    
+    userInfor.password = newPassword
+    userInfor.otp = undefined
+    userInfor.otp_expire = undefined
+    await userInfor.save()
+    res.status(200).json({
+        success:true,
+        message:`Password changed successfully!`
     })
 })
 exports.updateProfile=asyncError(async(req,res,next)=>{
