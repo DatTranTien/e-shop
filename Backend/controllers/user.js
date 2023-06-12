@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 const ErrorHandler = require("../utils/error")
 const { asyncError } = require("../middlewares/error")
 const { sendToken, cookieOptions, sendTokenLogin } = require("../utils/sendToken")
+const { getDataUri } = require("../utils/features")
+const cloudinary=require('cloudinary')
+
 exports.login = asyncError(async (req,res,next)=>{
     const {email,password}=req.body
     const userInfor=await user.findOne({email}).select('+password').exec()
@@ -26,15 +29,45 @@ exports.signup= asyncError(async(req,res,next)=>{
     if (userInfo) {
         return next(new ErrorHandler("User Already Exits",400))
     }
+    let avatar = undefined
+
+    if (req.file) {
+        let file=getDataUri(req.file)
+    const myCloud = await cloudinary.v2.uploader.upload(file.content)
+    avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url
+    }
+    }
    
      userInfo= await user.create({
-        name,email,password,address,pinCode,country,city
+        name,email,password,address,pinCode,country,city,avatar
     })
     sendToken(userInfo,res,"Registered success!",201)
     // res.status(201).json({
     //     success:true,
     //     message:"Registered success!"
     // })
+})
+exports.updatePic= asyncError(async(req,res,next)=>{   
+    const userInfo=await user.findById(req.user._id)
+    let file=getDataUri(req.file)
+    const myCloud = await cloudinary.v2.uploader.upload(file.content)
+    userInfo.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url
+    }
+
+   await userInfo.save()
+   
+    //  userInfo= await user.create({
+    //     name,email,password,address,pinCode,country,city,avatar
+    // })
+    // sendToken(userInfo,res,"Avatar was updated successfully!",201)
+    res.status(200).json({
+        success:true,
+        message:"Avatar was updated successfully!"
+    })
 })
 exports.getMyProfle=asyncError(async(req,res,next)=>{
     const userInfor=await user.findById(req.user._id)
