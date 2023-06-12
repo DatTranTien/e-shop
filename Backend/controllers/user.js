@@ -43,6 +43,55 @@ exports.getMyProfle=asyncError(async(req,res,next)=>{
         userInfor
     })
 })
+exports.updateProfile=asyncError(async(req,res,next)=>{
+    const userInfo=await user.findById(req.user._id)
+    const {name,email,address,pinCode,country,city}=req.body
+    if (name) {
+        userInfo.name=name
+    }
+    if (email) {
+        userInfo.email=email
+    }
+    if (address) {
+        userInfo.address=address
+    }
+    if (pinCode) {
+        userInfo.pinCode=pinCode
+    }
+    if (country) {
+        userInfo.country=country
+    }
+    if (city) {
+        userInfo.city=city
+    }
+   await userInfo.save()
+    res.status(200).json({
+        success:true,
+        message:"Profile was updated successfully!"
+    })
+})
+exports.changePassword=asyncError(async(req,res,next)=>{
+    const userInfo=await user.findById(req.user._id).select('+password')    
+    const {oldPassword,newPassword}= req.body
+    if (!oldPassword || !newPassword) {
+        return next(new ErrorHandler("please enter password!",400))
+    }
+    const isMatched=await user.comparePassword(oldPassword,userInfo.password)
+    if (!userInfo) {
+        return next(new ErrorHandler("Incorrect email or password!"))
+    }
+    if (!isMatched) {
+        return next(new ErrorHandler("incorrect old password!"))
+    }
+
+    userInfo.password=newPassword
+    
+    await userInfo.save()
+    res.status(200).json({
+        success:true,
+        message:"changePassword Successed!"
+    })
+})
 exports.logout=asyncError(async(req,res,next)=>{
     // const userInfor=await user.findById(req.user._id)
     res.status(200).cookie("token","",{
