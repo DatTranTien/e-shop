@@ -14,12 +14,12 @@ exports.sendTokenLogin=(user,res,mess,statusCode,id)=>{
     const token = user.generateTokenLogin(id)
     
     res.status(statusCode).cookie("token",token,{
-        ...this.cookieOptions,
+        // ...this.cookieOptions,
         expires: new Date(Date.now()+15*24*60*1000)
     }).json({
         success:true,
         message:mess,
-        // token
+        token
     })
 }
 exports.cookieOptions ={
