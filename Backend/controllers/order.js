@@ -2,6 +2,24 @@ const { asyncError } = require("../middlewares/error");
 const Order = require("../models/order");
 const Product = require("../models/product");
 const ErrorHandler = require("../utils/error");
+const Stripe = require('stripe')
+exports.processPayment=asyncError(async(req,res,next)=>{
+    const {totalAmount} = req.body
+    
+   let stripe = new Stripe("sk_test_51NISl2FFavnLEAlOaGQEha0VeG4C5W0mjt7VQq4zsdvDAmzg8DverQSCrcfKKjSaLM0DmJD9HctgDHnAdbmDI6bY00NACBSoHf")
+   const {client_secret}= await stripe.paymentIntents.create({
+        amount:Number(totalAmount*100),
+        currency:"vnd"
+  });
+    // stripe cuss.create({
+    //     amount:Number(totalAmount*100),
+    //     currency:"vnd"
+    // })
+    res.status(200).json({
+        success:true,
+        client_secret
+    })
+})
 
 exports.createOrder=asyncError(async(req,res,next)=>{
     const {
