@@ -7,17 +7,14 @@ const cloudinary=require('cloudinary')
 
 exports.getAdminProducts=asyncError(async (req,res,next)=>{
     const {keyword,category} = req.query
-    const all=await product.find({
-        name:{
-            $regex: keyword?keyword:"",
-            $options:"i",
-        },
-        category:category?category:undefined
-    })
+    const all=await product.find({}).populate("category")
+    const outOfStock=all.filter((i)=>i.stock === 0)
 
     res.status(200).json({
         success: true,
-        all
+        all,
+        outOfStock:outOfStock.length,
+        inStock: all.length-outOfStock.length
     })
 })
 exports.getAllProducts=asyncError(async (req,res,next)=>{

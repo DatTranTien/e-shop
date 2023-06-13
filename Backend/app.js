@@ -6,12 +6,17 @@ const app=express()
 const user = require('./routes/user.js')
 const product = require("./routes/product.js")
 const order = require("./routes/order.js")
+var cors = require('cors')
 
 app.use(cookieParser())
 config({
     path: './data/config.env'
 })
-
+app.use(cors({
+    credentials:true,
+    methods:['GET','POST','PUT','DELETE'],
+    origin:[process.env.FRONTEND_URL_1,process.env.FRONTEND_URL_2]
+}))
 // middlewares
 app.use(express.json())
 
