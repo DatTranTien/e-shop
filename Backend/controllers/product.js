@@ -5,6 +5,21 @@ const ErrorHandler = require("../utils/error");
 const { getDataUri } = require("../utils/features")
 const cloudinary=require('cloudinary')
 
+exports.getAdminProducts=asyncError(async (req,res,next)=>{
+    const {keyword,category} = req.query
+    const all=await product.find({
+        name:{
+            $regex: keyword?keyword:"",
+            $options:"i",
+        },
+        category:category?category:undefined
+    })
+
+    res.status(200).json({
+        success: true,
+        all
+    })
+})
 exports.getAllProducts=asyncError(async (req,res,next)=>{
     const all=await product.find()
 

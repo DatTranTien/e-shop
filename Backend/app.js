@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser')
 const app=express()
 const user = require('./routes/user.js')
 const product = require("./routes/product.js")
+const order = require("./routes/order.js")
 
 app.use(cookieParser())
 config({
@@ -19,6 +20,7 @@ app.get('/',(req,res,next)=>{
 })
 app.use('/api/v1/user',user)
 app.use('/api/v1/product',product)
+app.use('/api/v1/order',order)
 app.use(errorHandle)
 
 module.exports = app

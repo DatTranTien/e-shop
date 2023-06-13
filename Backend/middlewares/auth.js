@@ -12,3 +12,10 @@ exports.isAuthentication=asyncError(async(req,res,next)=>{
     next()
 }
     )
+exports.isAdmin=asyncError(async(req,res,next)=>{
+    if (req.user.role !== "admin") {
+     return   next(new ErrorHandler("Only Admin Allowed!",401))
+    }
+    next()
+}
+    )
