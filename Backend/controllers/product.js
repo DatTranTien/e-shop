@@ -1,5 +1,6 @@
 const { asyncError } = require("../middlewares/error");
 const product = require("../models/product");
+const Category = require("../models/category");
 const ErrorHandler = require("../utils/error");
 const { getDataUri } = require("../utils/features")
 const cloudinary=require('cloudinary')
@@ -131,5 +132,40 @@ exports.updateProduct=asyncError(async (req,res,next)=>{
     res.status(200).json({
         success: true,
         message:"Product updated successful!"
+    })
+})
+
+
+
+exports.deleteCategory=asyncError(async (req,res,next)=>{
+    const category=await Category.findById(req.params.id)
+    if (!category) {
+        return next(new ErrorHandler("Category not found!",404)) 
+    }
+    const _product = await product.find({category:category._id})
+    _product.forEach(async(item,i) => {
+        const prod=_product[i]
+        prod.category=undefined
+        await prod.save()
+    });
+    
+    await category.deleteOne()
+    res.status(200).json({
+        success: true,
+        message:"Category deleted successful!"
+    })
+})
+exports.createNewCategory=asyncError(async(req,res,next)=>{
+    await Category.create(req.body)
+    res.status(201).json({
+        success:true,
+        message:"Category Added Successfully!"
+    })
+})
+exports.getCategory=asyncError(async(req,res,next)=>{
+    const categories=await Category.find({})
+    res.status(200).json({
+        success:true,
+        categories
     })
 })
