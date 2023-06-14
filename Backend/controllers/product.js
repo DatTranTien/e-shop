@@ -6,7 +6,6 @@ const { getDataUri } = require("../utils/features")
 const cloudinary=require('cloudinary')
 
 exports.getAdminProducts=asyncError(async (req,res,next)=>{
-    const {keyword,category} = req.query
     const all=await product.find({}).populate("category")
     const outOfStock=all.filter((i)=>i.stock === 0)
 
@@ -18,7 +17,14 @@ exports.getAdminProducts=asyncError(async (req,res,next)=>{
     })
 })
 exports.getAllProducts=asyncError(async (req,res,next)=>{
-    const all=await product.find()
+    const {keyword,category} = req.query
+    const all=await product.find({
+        name:{
+            $regex:keyword || "",
+            $options:"i",
+        },
+        category:category || undefined
+    })
 
     res.status(200).json({
         success: true,

@@ -42,7 +42,7 @@ export default function Main() {
         headerShown:false
     }}
     >
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="home" component={Home} />
       <Stack.Screen name="productdetails" component={ProductDetails} />
       <Stack.Screen name="cart" component={Cart} />
       <Stack.Screen name="confirmoder" component={ConfirmOrder} />

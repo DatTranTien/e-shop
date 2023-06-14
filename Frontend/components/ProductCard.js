@@ -12,12 +12,24 @@ export default function ProductCard({
     id,
     key,
     i,
-    navigate
+    navigate,
+    item
 }) {
   return (
     <TouchableOpacity
     activeOpacity={1}
-    onPress={()=>navigate.navigate("productdetails",{id})}
+    onPress={()=>navigate.navigate("productdetails",{
+    stock,
+    name,
+    price,
+    image,
+    addToCardHandler,
+    id,
+    key,
+    i,
+    navigate,
+    item
+    })}
     >
         <View
         style={{
@@ -43,7 +55,7 @@ export default function ProductCard({
                 left:50,
                 top:105,
                 borderRadius:20,
-                borderBottomEndRadius:50
+                borderBottomEndRadius:50,
             }}
             />
             <View style={{

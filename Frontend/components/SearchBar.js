@@ -3,13 +3,21 @@ import React, { useEffect } from 'react'
 import { Avatar, Headline, Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../styles/styles';
-
+import { server } from '../redux/store';
+import axios from "axios"
 
 
 export default function SearchBar({setActiveSearch,products}) {
     const [searchQuery, setSearchQuery] = React.useState('');
-
-    const onChangeSearch = query => setSearchQuery(query);
+    const [data, setData] = React.useState(products);
+    const onChangeSearch = query => {
+      setSearchQuery(query)
+      setTimeout(async () => {
+        console.log("dfadf",query) 
+      let getData= await axios.get(`${server}/product/all?keyword=${query}`)
+        setData(getData.data.all)
+      })
+    };
 
     const backAction =()=>{
         setSearchQuery("")
@@ -40,7 +48,9 @@ export default function SearchBar({setActiveSearch,products}) {
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      <TouchableOpacity>
+      {
+        data?.map(element => 
+            <TouchableOpacity>
         <View style={
             {
                 padding:20,
@@ -56,7 +66,7 @@ export default function SearchBar({setActiveSearch,products}) {
         }>
             <Image
             source={{
-                uri:products[0].images[0].url
+                uri:element.images[0].url
             }}
             style={{
                 width:80,
@@ -69,13 +79,17 @@ export default function SearchBar({setActiveSearch,products}) {
             }}
             />
             <View style={{width:"80%", paddingHorizontal:30}}>
-                <Text numberOfLines={1}>{products[0].name}</Text>
+                <Text numberOfLines={1}>{element.name}</Text>
                 <Headline
                 style={{fontWeight:"900"}}
-                >{products[0].price}$</Headline>
+                >{element.price}$</Headline>
             </View>
         </View>
       </TouchableOpacity>
+          
+        )
+      }
+      
       </SafeAreaView>
     );
 }

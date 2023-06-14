@@ -1,5 +1,5 @@
 import {FlatList, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { colors, defaultStyle } from '../styles/styles';
 import Header from '../components/Header';
 import { Avatar } from 'react-native-paper';
@@ -8,46 +8,52 @@ import SearchBar from '../components/SearchBar';
 import ProductCard from '../components/ProductCard';
 import Footer from '../components/Footer';
 import Heading from '../components/Heading';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProducts } from '../redux/actions/productAction';
+import { getCategory } from '../redux/actions/categoryAction';
 
 
 
 
 
-const categories=[
-  {category:"DAT",_id:"tran"},
-  {category:"DAT1",_id:"tran1"},
-  {category:"DAT2",_id:"tran2"},
-  {category:"DAT3",_id:"tran3"},
-  {category:"DAT4",_id:"tran4"},
-  {category:"DAT5",_id:"tran5"},
-]
+// const categories=[
+//   {category:"DAT",_id:"tran"},
+//   {category:"DAT1",_id:"tran1"},
+//   {category:"DAT2",_id:"tran2"},
+//   {category:"DAT3",_id:"tran3"},
+//   {category:"DAT4",_id:"tran4"},
+//   {category:"DAT5",_id:"tran5"},
+// ]
 
-export const products=[
-  {
-    price:213,
-    category:"category1111",
-    stock:23,
-    name:"Sample 1",
-    _id:"lll",
-    images:[
-      {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-2cuj7vo91zOktcl875LgU2ITbubYs3TlIGX1zxU-&s"}
-    ]
-  },
-  {
-    price:213,
-    category:"category1111",
-    stock:23,
-    name:"Sample 2",
-    _id:"lll",
-    images:[
-      {url:"https://prod-discovery.edx-cdn.org/media/course/image/0e575a39-da1e-4e33-bb3b-e96cc6ffc58e-8372a9a276c1.png"}
-    ]
-  },
-]
+// export const products=[
+//   {
+//     price:213,
+//     category:"category1111",
+//     stock:23,
+//     name:"Sample 1",
+//     _id:"lll",
+//     images:[
+//       {url:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-2cuj7vo91zOktcl875LgU2ITbubYs3TlIGX1zxU-&s"}
+//     ]
+//   },
+//   {
+//     price:213,
+//     category:"category1111",
+//     stock:23,
+//     name:"Sample 2",
+//     _id:"lll",
+//     images:[
+//       {url:"https://prod-discovery.edx-cdn.org/media/course/image/0e575a39-da1e-4e33-bb3b-e96cc6ffc58e-8372a9a276c1.png"}
+//     ]
+//   },
+// ]
 export default function Home() {
   const [category, setCategory] = useState("")
   const [activeSearch, setActiveSearch] = useState(false)
   const navigate=useNavigation()
+  const dispatch=useDispatch()
+  const {products}=useSelector((state)=>state.product)
+  const {categories}=useSelector((state)=>state.categories)
 
   const categoryButtonHandler = (id)=>{
     setCategory(id)
@@ -57,7 +63,15 @@ export default function Home() {
     console.log("add to cart ",id)
   }
 
+  useEffect(()=>{
+    dispatch(getAllProducts(""))
+    dispatch(getCategory())
+  },[])
+
+
   const renderItemProduct=(item,index)=>{
+    console.log("item===>",item)
+    console.log("index===>",index)
     return  <ProductCard
       stock={item.stock}
       name={item.name}
@@ -68,6 +82,7 @@ export default function Home() {
       key={item._id}
       i={index}
       navigate={navigate}
+      item={item}
       />
     
   }
