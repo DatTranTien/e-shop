@@ -8,12 +8,10 @@ import Footer from '../components/Footer'
 import Loader from '../components/Loader'
 import { useDispatch,useSelector } from 'react-redux'
 import { loadUser, logout } from '../redux/actions/userAction'
+import mime from 'mime'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { updatePic } from '../redux/actions/otherAction'
 
-
-const user = {
-    name:"us",
-    email:"dat@gmail.com"
-}
 export default function Profile({navigation,route}) {
     const [avatar, setAvatar] = useState("")
     const navigate=useNavigation()
@@ -21,10 +19,23 @@ export default function Profile({navigation,route}) {
     const userInfo = useSelector(
         (state)=>state.user
       )
-    console.log("userInfo",userInfo)
     const {loading,isAuthenticated} = useSelector(
         (state)=>state.user
       )
+      const callSuccess=(message)=>{
+        Toast.show({
+          type:"success",
+          text1:message
+        })
+        dispatch(loadUser())
+        // navigation.navigate("profile")
+       }
+       const callError=(message)=>{
+        Toast.show({
+          type:"error",
+          text1:message
+        })
+       }
 const logoutHandler=()=>{
     dispatch(logout())
 }
@@ -37,6 +48,13 @@ useEffect(()=>{
 useEffect(() => {
     if (route.params?.image) {
         setAvatar(route.params.image)
+        const myForm = new FormData()
+        myForm.append("file",{
+            uri:route.params.image,
+            type: mime.getType(route.params.image),
+            name:route.params.image.split("/").pop()
+        })
+        dispatch(updatePic(myForm,callSuccess,callError))
     }
     }, [route.params])
 
@@ -77,7 +95,7 @@ useEffect(() => {
         <View style={styles.container}>
             <Avatar.Image
             source={{
-                uri:avatar
+                uri:avatar || userInfo?.user?.avatar.url
             }}
             size={100}
             style={{backgroundColor:colors.color1}}
@@ -107,12 +125,14 @@ useEffect(() => {
                 text={"Orders"}
                 icon={"format-list-bulleted-square"}
                 />
-                <ButtonBox
-                handler={navigateHandler}
-                icon={"view-dashboard"}
-                text={"Admin"}
-                reverse={true}
-                />
+                {userInfo?.user?.role === "admin" && (
+                    <ButtonBox
+                    handler={navigateHandler}
+                    icon={"view-dashboard"}
+                    text={"Admin"}
+                    reverse={true}
+                    />
+                )}
                 <ButtonBox
                 handler={navigateHandler}
                 text={"Profile"}

@@ -16,7 +16,6 @@ export default function Login({navigation}) {
   const {loading, message,error, isAuthenticated} = useSelector(
     (state)=>state.user
   )
-  console.log("loaddiingf----->",loading,"message",message,"error",error,"isAuthenticated",isAuthenticated)
 
   const imputOptions={
     style: inputStyling,

@@ -4,6 +4,9 @@ import { colors, defaultStyle, inputStyling } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch,useSelector } from 'react-redux'
+import { updatePassword } from '../redux/actions/otherAction'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 export default function ChangePassword({navigation}) {
   const [oldPass, setOldPass] = useState("")
@@ -14,6 +17,25 @@ export default function ChangePassword({navigation}) {
     mode:"outlined",
     activeOutlineColor:colors.color1
   }
+ const dispatch = useDispatch()
+ const callSuccess=(message)=>{
+  Toast.show({
+    type:"success",
+    text1:message
+  })
+  navigation.navigate("profile")
+ }
+ const callError=(message)=>{
+  Toast.show({
+    type:"error",
+    text1:message
+  })
+ }
+  const submithandler =()=>{
+    dispatch(updatePassword(oldPass,pass,callSuccess,callError))
+    setOldPass("")
+    setPass("")
+  }
   return (
     <View style={[defaultStyle,{backgroundColor:colors.color2}]}>
       <View style={{marginBottom:20}}>
@@ -21,13 +43,13 @@ export default function ChangePassword({navigation}) {
       </View>
       <View style={styles.container}>
         <TextInput style={{...imputOptions}} 
-        placeholder="Email"
+        placeholder="old pass"
         keyboardType="email-address"
         value={oldPass}
         onChangeText={setOldPass}
         />
         <TextInput style={{...imputOptions,marginTop:15}} 
-        placeholder="Password"
+        placeholder="new password"
         keyboardType="email-address"
         value={pass}
         onChangeText={setPass}
@@ -39,7 +61,7 @@ export default function ChangePassword({navigation}) {
         style={{
             marginTop:20
         }}
-        onPress={()=>navigate.navigate("confirmoder")}>
+        onPress={submithandler}>
         <Button
         disabled={oldPass==""|| pass == ""}
         textColor={colors.color3}
