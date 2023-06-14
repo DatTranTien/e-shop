@@ -4,6 +4,9 @@ import { colors, defaultStyle, inputStyling } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
+import mime from 'mime'
+import { useDispatch,useSelector } from 'react-redux'
+import { register } from '../redux/actions/userAction'
 
 export default function Signup({navigation,route}) {
   const [avatar, setAvatar] = useState("")
@@ -16,12 +19,41 @@ export default function Signup({navigation,route}) {
   const [pinCode, setPincode] = useState("")
 
   const navigate =useNavigation()
+  const dispatch=useDispatch()
+  const {isAuthenticated} = useSelector(
+    (state)=>state.user
+  )
 
   useEffect(() => {
     if (route.params?.image) {
         setAvatar(route.params.image)
     }
     }, [route.params])
+
+    useEffect(()=>{
+      if (isAuthenticated) {
+          navigation.navigate("profile")
+      }
+  },[isAuthenticated])
+
+    const submitHandler = ()=>{
+      const myForm = new FormData()
+      myForm.append("name",name)
+      myForm.append("email",email)
+      myForm.append("password",password)
+      myForm.append("address",address)
+      myForm.append("city",city)
+      myForm.append("country",country)
+      myForm.append("pinCode",pinCode)
+      if (avatar !== "") {
+        myForm.append("file",{
+          uri:avatar,
+          type: mime.getType(avatar),
+          name:avatar.split("/").pop()
+        })
+      }
+      dispatch(register(myForm))
+    }
 
   const imputOptions={
     style: {
@@ -96,7 +128,7 @@ export default function Signup({navigation,route}) {
 
 </View>
 
-        <TouchableOpacity onPress={()=>Alert.alert("succcess")}>
+        <TouchableOpacity onPress={submitHandler}>
         <Button
         disabled={email==""|| password == ""}
         textColor={colors.color3}

@@ -1,13 +1,16 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { colors } from '../styles/styles'
 import { Avatar } from 'react-native-paper'
+import {useSelector} from 'react-redux'
 
 export default function Footer({activeRoute="home"}) {
     const navigate = useNavigation()
-    const loading = true
-    const isAuthenticated = true
+    const {loading, isAuthenticated} = useSelector(
+      (state)=>state.user
+    )
+    console.log(loading, isAuthenticated)
     const navigationHandler=(key)=>{
         switch (key) {
             case 0:
@@ -32,7 +35,7 @@ export default function Footer({activeRoute="home"}) {
         borderTopRightRadius:120,
         borderTopLeftRadius:120
     }}>
-      {loading&&(
+      {!loading&&(
         <>
         <View style={{
         flexDirection:"row",

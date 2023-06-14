@@ -6,20 +6,34 @@ import { useNavigation } from '@react-navigation/native'
 import ButtonBox from '../components/ButtonBox'
 import Footer from '../components/Footer'
 import Loader from '../components/Loader'
-
+import { useDispatch,useSelector } from 'react-redux'
+import { loadUser, logout } from '../redux/actions/userAction'
 
 
 const user = {
-    name:"Dat",
+    name:"us",
     email:"dat@gmail.com"
 }
-const loading=false
 export default function Profile({navigation,route}) {
     const [avatar, setAvatar] = useState("")
     const navigate=useNavigation()
+    const dispatch = useDispatch()
+    const userInfo = useSelector(
+        (state)=>state.user
+      )
+    console.log("userInfo",userInfo)
+    const {loading,isAuthenticated} = useSelector(
+        (state)=>state.user
+      )
 const logoutHandler=()=>{
-    console.log("signing out")
+    dispatch(logout())
 }
+useEffect(()=>{
+    dispatch(loadUser())
+    if (!isAuthenticated) {
+        navigation.navigate("login")
+    }
+},[isAuthenticated])
 useEffect(() => {
     if (route.params?.image) {
         setAvatar(route.params.image)
@@ -74,8 +88,8 @@ useEffect(() => {
                 <Button>Change Photo</Button>
             </TouchableOpacity>
 
-            <Text style={{fontWeight:"800",color:colors.color1,fontSize:18}}>{user?.name}</Text>
-            <Text style={{fontWeight:"400",color:colors.color1}}>{user?.email}</Text>
+            <Text style={{fontWeight:"800",color:colors.color1,fontSize:18}}>{userInfo?.user?.name}</Text>
+            <Text style={{fontWeight:"400",color:colors.color1}}>{userInfo?.user?.email}</Text>
         </View>
 
 
@@ -126,7 +140,7 @@ useEffect(() => {
                 handler={navigateHandler}
                 icon={"exit-to-app"}
                 text={"Sign Out"}
-                reverse={true}
+                // reverse={true}
                 />
 
             </View>

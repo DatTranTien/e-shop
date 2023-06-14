@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './screens/Home';
 import Login from './screens/Login';
@@ -22,10 +22,19 @@ import UpdateProduct from './screens/Admin/UpdateProduct';
 import NewProduct from './screens/Admin/NewProduct';
 import ProductImages from './screens/Admin/ProductImages';
 import CameraComponent from './screens/Admin/CameraComponent';
+import {useDispatch,useSelector} from 'react-redux'
+import { loadUser } from './redux/actions/userAction';
 
 const Stack = createNativeStackNavigator();
 
 export default function Main() {
+  const dispatch = useDispatch()
+  const {loading, message,error, isAuthenticated} = useSelector(
+    (state)=>state.user
+  )
+  useEffect(()=>{
+    dispatch(loadUser())
+  },[dispatch])
   return (
     <>
     <Stack.Navigator initialRouteName="Home"

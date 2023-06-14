@@ -4,16 +4,20 @@ import { colors, defaultStyle, inputStyling } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
 export default function UpdateProfile({navigation}) {
+  const userInfo = useSelector(
+    (state)=>state.user
+  )
   const [avatar, setAvatar] = useState("")
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
+  const [name, setName] = useState(userInfo?.user?.name)
+  const [email, setEmail] = useState(userInfo?.user.email)
   const [password, setPassWord] = useState("")
-  const [address, setAddress] = useState("")
-  const [city, setCity] = useState("")
-  const [country, setCountry] = useState("")
-  const [pinCode, setPincode] = useState("")
+  const [address, setAddress] = useState(userInfo?.user.address)
+  const [city, setCity] = useState(userInfo?.user.city)
+  const [country, setCountry] = useState(userInfo?.user.country)
+  const [pinCode, setPincode] = useState(userInfo?.user.pinCode)
 
   const navigate =useNavigation()
 
@@ -75,16 +79,15 @@ export default function UpdateProfile({navigation}) {
         />
         <TextInput style={{height:40,borderRadius:10,marginTop:10}} 
         placeholder="pinCode"
-        keyboardType="email-address"
-        value={pinCode}
+        value={pinCode.toString()}
         onChangeText={setPincode}
         />
-        <TextInput style={{height:40,borderRadius:10,marginTop:10}} 
+        {/* <TextInput style={{height:40,borderRadius:10,marginTop:10}} 
         placeholder="Password"
         keyboardType="email-address"
         value={password}
         onChangeText={setPassWord}
-        />
+        /> */}
 
 
 </View>
