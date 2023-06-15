@@ -18,22 +18,10 @@ export default function ProductCard({
   return (
     <TouchableOpacity
     activeOpacity={1}
-    onPress={()=>navigate.navigate("productdetails",{
-    stock,
-    name,
-    price,
-    image,
-    addToCardHandler,
-    id,
-    key,
-    i,
-    navigate,
-    item
-    })}
     >
         <View
         style={{
-            elevation:5,
+            elevation:55,
             width:220,
             alignItems:"center",
             justifyContent:"space-between",
@@ -86,6 +74,17 @@ export default function ProductCard({
             </View>
 
             <TouchableOpacity
+            onPress={()=>navigate.navigate("productdetails",{
+                stock,
+                name,
+                price,
+                image,
+                id,
+                key,
+                i,
+                navigate,
+                item
+                })}
                 style={{
                     backgroundColor: i % 2 === 0 ? colors.color2: colors.color3,
                     borderBottomEndRadius:10,
@@ -93,10 +92,9 @@ export default function ProductCard({
                     alignItems:"center"
                 }}
                 >
-                    <Button
-                    onPress={()=>addToCardHandler(id,stock)}
-                    textColor={i%2 === 0 ? colors.color1 : colors.color2}
-                    >Add to Cart</Button>
+                    <Text
+                    style={{color:i%2 === 0 ? colors.color1 : colors.color2 ,padding:10,fontWeight:"700"}}
+                    >Xem Chi Tiết</Text>
                 </TouchableOpacity>
 
         </View>

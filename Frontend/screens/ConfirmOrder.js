@@ -1,21 +1,30 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { colors, defaultStyle } from '../styles/styles'
 import Header from '../components/Header'
 import Heading from '../components/Heading'
-import { cartItems } from './Cart'
 import ConfirmOrderItem from '../components/ConfirmOrderItem'
 import { Button } from 'react-native-paper'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
-export default function ConfirmOrder() {
-    const itemPrices=400
+export default function ConfirmOrder({route:{params}}) {
+  // const [price, setPrice] = useState(0)
+  const {cartItems,price}=params
+  console.log("cartItems",cartItems)
+  
+  // useFocusEffect(
+  //   React.useCallback(() => {
+     
+  //   }, [])
+  // );
+    // const itemPrices=400
     const shippingCharges=200
-    const tax = 0.18* itemPrices
-    const totalAmount = itemPrices + shippingCharges +tax
+    const tax = parseInt(0.18* price)
+    const totalAmount = parseInt(price + shippingCharges +tax)
     const navigate=useNavigation() 
-  return (
-    <View style={defaultStyle}>
+    return (
+    
+      <View style={defaultStyle}>
       <Header back={true} />
       <Heading text1="Confirm" text2='Order' />
       <View style={{
@@ -27,13 +36,13 @@ export default function ConfirmOrder() {
                 return <ConfirmOrderItem key={index} item={item}/>
             })}
         </ScrollView>
-        <PriceTag heading={"Subtotal"} value={itemPrices} />
+        <PriceTag heading={"Subtotal"} value={price} />
         <PriceTag heading={"Shipping"} value={shippingCharges} />
         <PriceTag heading={"Tax"} value={tax} />
         <PriceTag heading={"Total"} value={totalAmount} />
       </View>
 
-      <TouchableOpacity onPress={()=>navigate.navigate("payment")}>
+      <TouchableOpacity onPress={()=>navigate.navigate("payment",{cartItems,totalAmount,taxPrice:tax,shippingCharges,itemPrice:price})}>
         <Button
         icon={'credit-card'}
         textColor={colors.color2}
@@ -50,7 +59,8 @@ export default function ConfirmOrder() {
 
       
     </View>
-  )
+    
+ )
 }
 const PriceTag = ({heading,value})=>{
     return <View style={{

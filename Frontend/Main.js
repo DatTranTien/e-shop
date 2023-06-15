@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './screens/Home';
 import Login from './screens/Login';
@@ -29,9 +29,6 @@ const Stack = createNativeStackNavigator();
 
 export default function Main() {
   const dispatch = useDispatch()
-  const {loading, message,error, isAuthenticated} = useSelector(
-    (state)=>state.user
-  )
   useEffect(()=>{
     dispatch(loadUser())
   },[dispatch])

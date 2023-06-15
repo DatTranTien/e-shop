@@ -10,7 +10,6 @@ export default function Footer({activeRoute="home"}) {
     const {loading, isAuthenticated} = useSelector(
       (state)=>state.user
     )
-    console.log(loading, isAuthenticated)
     const navigationHandler=(key)=>{
         switch (key) {
             case 0:
@@ -82,7 +81,7 @@ export default function Footer({activeRoute="home"}) {
         alignSelf:"center"
       }}>
         <TouchableOpacity activeOpacity={0.8}
-        onPress={()=>navigationHandler(2)}
+        onPress={()=>navigate.navigate("home")}
         >
             <Avatar.Icon
             color={colors.color2}

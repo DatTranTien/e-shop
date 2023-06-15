@@ -11,6 +11,7 @@ import Heading from '../components/Heading';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllProducts } from '../redux/actions/productAction';
 import { getCategory } from '../redux/actions/categoryAction';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 
 
 
@@ -59,10 +60,6 @@ export default function Home() {
     setCategory(id)
   }
 
-  const addToCardHandler = ()=>{
-    console.log("add to cart ",id)
-  }
-
   useEffect(()=>{
     dispatch(getAllProducts(""))
     dispatch(getCategory())
@@ -77,7 +74,6 @@ export default function Home() {
       name={item.name}
       price={item.price}
       image={item.images[0]?.url}
-      addToCardHandler={addToCardHandler}
       id={item._id}
       key={item._id}
       i={index}

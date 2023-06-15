@@ -1,15 +1,16 @@
 import { Dimensions, StyleSheet, Image, View, Text, TouchableOpacity, SafeAreaView } from 'react-native'
-import React, { useRef,useState } from 'react'
+import React, { useImperativeHandle, useRef,useState } from 'react'
 import { colors, defaultStyle } from '../styles/styles'
 import Header from '../components/Header'
 import Carousel from 'react-native-snap-carousel'
 import { Avatar, Button } from 'react-native-paper'
 import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
 
 const SLIDER_WIDTH= Dimensions.get('window').width
 const ITEM_WIDTH = SLIDER_WIDTH
 
-const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 export default function ProductDetails({route:{params}}) {
@@ -18,20 +19,49 @@ export default function ProductDetails({route:{params}}) {
     name,
     price,
     image,
-    // addToCardHandler,
     id,
-    key,
-    i,
-    navigate,
     item
     } = params
+  const {cartItems}=useSelector((state)=>state.cart)
+  let count =0;
+  
+//   if (cartItems ) {
+//     console.log("vao day--->",cartItems.length)
+//     cartItems.map((element) => {
+        
+//         if (element.product === id) {
+//             count = element.quantity
+//             setQuantity(element.quantity)
+//         }
+//       });
+//   }
+  useFocusEffect(
+    React.useCallback(() => {
+        if (cartItems ) {
+            cartItems.map((element) => {
+                
+                if (element.product === id) {
+                    count = element.quantity
+                    setQuantity(element.quantity)
+                    console.log("count--->",count)
+                    console.log("cartItems--->",cartItems)
+                }
+              });
+          }
+    }, [cartItems])
+  );
+  
     const isCarousel = useRef(null)
-    const [quantity, setQuantity] = useState(2)
+    const [quantity, setQuantity] = useState(count||1)
     const [disableDecrement, setDisableDecrement] = useState(false)
-    
-    const incrementQty = ()=>{
+    const dispatch=useDispatch()
+
+     const incrementQty = ()=>{
         if (stock<=quantity) {
-            return
+            return Toast.show({
+                type:"error",
+                text1:"Stock = quantity"
+            })
         }
             setDisableDecrement(false)
         setQuantity((prev)=>prev+1)
@@ -50,34 +80,24 @@ export default function ProductDetails({route:{params}}) {
             return Toast.show({
                 type:"error",
                 text1:"Out of Stock",
-                text2:"This is text 2"
             })
         }
-
-        Toast.show({
-            type:"success",
-            text1:"Đã thêm vào giỏ hàng!",
-            text2:"This is text 2"
-        })
+        dispatch({
+            type:"addToCart",
+            payload:{
+              product: id,
+              name,
+              price,
+              image,
+              stock,
+              quantity
+            }
+          })
+          return Toast.show({
+            type: "success",
+            text1:"Added Successfuly!"
+          })
     }
-//     const images = [
-//         {
-//         id:"djafkjksdf",
-//         url:"https://thumbs.dreamstime.com/b/business-training-courses-concept-modern-vector-illustration-flat-style-landing-page-mobile-app-poster-banner-flyer-189016731.jpg"
-//     },
-//         {
-//         id:"djafkjksdf",
-//         url:"https://previews.123rf.com/images/alisarut/alisarut2002/alisarut200200035/141061471-vector-illustration-coaching-training-communication-contact-using-mobile-app-concept.jpg"
-//     },
-//         {
-//         id:"djafkjksdf",
-//         url:"https://img.freepik.com/free-vector/organic-flat-people-business-training_23-2148909572.jpg?w=2000"
-//     },
-//         {
-//         id:"djafkjksdf",
-//         url:"https://img.freepik.com/premium-vector/student-woman-with-laptop-studying-online-course-online-education-concept-vector-illustration-flat_186332-1147.jpg?w=2000"
-//     },
-// ]
   return (
     <View style={{
         ...defaultStyle,

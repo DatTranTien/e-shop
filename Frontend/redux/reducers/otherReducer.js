@@ -6,10 +6,40 @@ export const otherReducer= createReducer({},(builder)=>{
     }).addCase("updatePasswordSuccess",(state,action)=>{
         state.loading=true
         state.message=action.payload.message
-    }).addCase("updatePasswordFail",(state,action)=>{
+    })
+    .addCase("updatePasswordFail",(state,action)=>{
         state.loading=true
         state.error=action.payload
     })
+
+
+
+    builder.addCase("orderRequest",(state)=>{
+        state.loading = true
+    }).addCase("orderSuccess",(state,action)=>{
+        state.loading=true
+        state.message=action.payload.message
+    })
+    .addCase("orderFail",(state,action)=>{
+        state.loading=true
+        state.error=action.payload
+    })
+
+
+
+    builder.addCase("orderOnlineRequest",(state)=>{
+        state.loading = true
+    }).addCase("orderOnlineSuccess",(state,action)=>{
+        state.loading=true
+        state.message=action.payload.message
+    })
+    .addCase("orderOnlineFail",(state,action)=>{
+        state.loading=true
+        state.error=action.payload
+    })
+
+
+    
 
     builder.addCase("updateProfileRequest",(state)=>{
         state.loading = true

@@ -2,32 +2,59 @@ import { StyleSheet, Text, View,TouchableOpacity,Image, Dimensions } from 'react
 import React, { useState } from 'react'
 import { Avatar, Headline } from 'react-native-paper'
 import { colors } from '../styles/styles'
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
+import { useDispatch } from 'react-redux';
 
 
 
-const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 export default function CartItem({key,index,item,decrementHandle,incrementHandle}) {
     const [disableDecrement, setDisableDecrement] = useState(false)
-    const [quantity, setQuantity] = useState(2)
+    const [quantity, setQuantity] = useState(item.quantity ||0)
+    const dispatch=useDispatch()
     
     
     
     const incrementQty = ()=>{
-        // if (stock<=quantity) {
-        //     return
-        // }
+        if (item.stock<=quantity) {
+            return Toast.show({
+                type:"error",
+                text1:"Stock = quantity"
+            })
+        }
             setDisableDecrement(false)
-        setQuantity((prev)=>prev+1)
+        setQuantity((prev)=>{
+            dispatch({
+                type:"addToCart",
+                payload:{
+                  ...item,
+                  quantity:quantity+1
+                }
+              })
+           return prev+1})
     }
     const decrementQty = ()=>{
         
-        setQuantity((prev)=>{
-            if (prev<2) {
-                setDisableDecrement(true)
-            }
-          return  prev-1
+        Promise.resolve(
+            setQuantity((prev)=>{
+                dispatch({
+                    type:"addToCart",
+                    payload:{
+                      ...item,
+                      quantity:quantity-1
+                    }
+                  })
+                if (prev<3) {
+                    setDisableDecrement(true)
+                }
+                
+              return  prev-1
+            })
+        ).then(()=>{
+            console.log("quan tity----->",quantity)
+            
         })
+        
     }
 
 
@@ -77,7 +104,7 @@ export default function CartItem({key,index,item,decrementHandle,incrementHandle
             alignItems:"center"
         }}
         >
-            <Text style={{fontWeight:"500"}}>Cart item</Text>
+            <Text style={{fontWeight:"500"}}>{item.name}</Text>
         </View>
 
 

@@ -4,21 +4,53 @@ import { colors, defaultStyle } from '../styles/styles'
 import Header from '../components/Header'
 import Heading from '../components/Heading'
 import { RadioButton,Button } from 'react-native-paper'
+import { useDispatch, useSelector } from 'react-redux'
+import { paymentOrder, paymentOrderOnline } from '../redux/actions/otherAction'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { useStripe } from '@stripe/stripe-react-native'
 
 export default function Payment({navigation,route }) {
     const [paymentMethod, setPaymentMethod] = useState("COD")
-    const isAuthenticated=true
+    const {user, isAuthenticated} = useSelector(
+      (state)=>state.user
+    )
+    const stripe = useStripe()
+    const dispatch = useDispatch()
+
 
     const redirecToLogin=()=>{
         navigation.navigate("login")
     }
     const codHandler=()=>{
       console.log("first")
-navigation.navigate("login")
+      const shippingInfo = {
+        address: user.address,
+        city: user.city,
+        country: user.country,
+        pinCode: user.pinCode,
+      }
+      const itemPrice = route.params.itemPrice
+      const shippingCharges = route.params.shippingCharges
+      const taxPrice = route.params.taxPrice
+      const totalAmount = route.params.totalAmount
+      dispatch(paymentOrder(itemPrice,shippingCharges,taxPrice,totalAmount,paymentMethod,cartItems=route.params.cartItems,shippingInfo,callSuccess,callError))
     }
     const onlineHandler=()=>{
-
+      dispatch(paymentOrderOnline(route.params.totalAmount,callSuccess,callError,codHandler,stripe))
     }
+    const callSuccess=(message)=>{
+      Toast.show({
+        type:"success",
+        text1:message
+      })
+      navigation.navigate("profile")
+     }
+     const callError=(message)=>{
+      Toast.show({
+        type:"error",
+        text1:message
+      })
+     }
   return (
     <View style={defaultStyle}>
       <Header back={true} />
