@@ -26,9 +26,37 @@ export const productReducer= createReducer({
         state.inStock = action.payload.inStock
         state.outOfStock = action.payload.outOfStock
     })
-    .addCase("getProductDetailsSuccess",(state,action)=>{
+    .addCase("getProductDetailSuccess",(state,action)=>{
         state.loading=true
         state.product=action.payload
+    })
+
+
+
+    .addCase("updateImageProductRequest",(state,action)=>{
+        state.loading=true
+    })
+    .addCase("updateImageProductSuccess",(state,action)=>{
+        state.loading=true
+        state.message=action.payload.message
+    })
+    .addCase("updateImageProductFail",(state,action)=>{
+        state.loading=true
+        state.error=action.payload.error
+    })
+
+
+
+    .addCase("updateProductRequest",(state,action)=>{
+        state.loading=true
+    })
+    .addCase("updateProductSuccess",(state,action)=>{
+        state.loading=true
+        state.message=action.payload
+    })
+    .addCase("updateProductFail",(state,action)=>{
+        state.loading=true
+        state.error=action.payload
     })
 
 
@@ -42,6 +70,35 @@ export const productReducer= createReducer({
         state.error=action.payload
     })
     .addCase("getProductDetailFail",(state,action)=>{
+        state.loading=false
+        state.error=action.payload
+    })
+
+
+    
+    .addCase("deleteImageProductRequest",(state,action)=>{
+        state.loading=false
+        state.message=action.payload
+    })
+    .addCase("deleteImageProductSuccess",(state,action)=>{
+        state.loading=false
+        state.message=action.payload
+    })
+    .addCase("deleteImageProductFail",(state,action)=>{
+        state.loading=false
+        state.error=action.payload
+    })
+
+
+    
+    .addCase("deleteProductRequest",(state,action)=>{
+        state.loading=false
+    })
+    .addCase("deleteProductSuccess",(state,action)=>{
+        state.loading=false
+        state.message=action.payload
+    })
+    .addCase("deleteProductFail",(state,action)=>{
         state.loading=false
         state.error=action.payload
     })

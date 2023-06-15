@@ -12,7 +12,9 @@ export default function ProductListItem({
     stock,
     name,
     category,
-    imgSrc
+    imgSrc,
+    item,
+    image
 }) {
     const [openModal, setOpenModal] = useState(true)
     
@@ -24,7 +26,16 @@ export default function ProductListItem({
             setOpenModal((prev)=>!prev)
         }
       }}
-      onPress={()=>navigate.navigate("productdetails",{id})}>
+      onPress={()=>navigate.navigate("productdetails",{
+        stock,
+        name,
+        price,
+        image,
+        id,
+        i,
+        navigate,
+        item
+        })}>
         <View style={{
             ...styles.container,
             backgroundColor: i%2 === 0 ?colors.color1:colors.color3

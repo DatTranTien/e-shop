@@ -53,7 +53,7 @@ export default function Categories() {
                 padding:20,
                 minHeight:400
             }}>
-                {categories.map((i)=>(
+                {categories?.map((i)=>(
                     <CategoryCard
                     name={i.name}
                     id={i._id}

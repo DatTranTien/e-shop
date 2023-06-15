@@ -6,10 +6,22 @@ import Loader from '../../components/Loader'
 import ButtonBox from '../../components/ButtonBox'
 import ProductListHeading from '../../components/ProductListHeading'
 import ProductListItem from '../../components/ProductListItem'
-import { products } from '../Home'
 import Chart from '../../components/Chart'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
+import { deleteProduct, getAllProducts } from '../../redux/actions/productAction'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 export default function AdminPanel({navigation}) {
+    const {products} = useSelector(
+        (state)=>state.product
+      )
+      const dispatch=useDispatch()
+      useFocusEffect(
+        React.useCallback(() => {
+          dispatch(getAllProducts(""))
+        }, [])
+      );
     const loading = true
     const navigateHandler=(text)=>{
         switch (text) {
@@ -28,8 +40,22 @@ export default function AdminPanel({navigation}) {
                 break;
         }
     }
+
+    const callSuccess=(message)=>{
+        Toast.show({
+          type:"success",
+          text1:message
+        })
+        navigation.navigate("profile")
+       }
+       const callError=(message)=>{
+        Toast.show({
+          type:"error",
+          text1:message
+        })
+       }
     const deleteProductHandler=(id)=>{
-        console.log("first")
+        dispatch(deleteProduct(id,callSuccess,callError))
     }
   return (
     <View style={defaultStyle}>
@@ -74,6 +100,8 @@ export default function AdminPanel({navigation}) {
                 navigate={navigation}
                 id={item._id}
                 i={index}
+                item={item}
+                image={item.images[0].url}
                 price={item.price}
                 stock={item.stock}
                 name={item.name}

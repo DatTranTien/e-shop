@@ -67,8 +67,6 @@ export default function Home() {
 
 
   const renderItemProduct=(item,index)=>{
-    console.log("item===>",item)
-    console.log("index===>",index)
     return  <ProductCard
       stock={item.stock}
       name={item.name}

@@ -37,6 +37,7 @@ export default function Payment({navigation,route }) {
     }
     const onlineHandler=()=>{
       dispatch(paymentOrderOnline(route.params.totalAmount,callSuccess,callError,codHandler,stripe))
+
     }
     const callSuccess=(message)=>{
       Toast.show({

@@ -5,12 +5,11 @@ import { Image } from 'react-native'
 import { Avatar } from 'react-native-paper'
 
 export default function ImageCard({src,id, deleteHandler}) {
-    console.log("src--->",src)
   return (
     <View style={styles.container}>
       <Image
       source={{
-        uri:"https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg"
+        uri:src
       }}
       style={{
         width:"100%",

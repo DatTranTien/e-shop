@@ -39,6 +39,20 @@ export const otherReducer= createReducer({},(builder)=>{
     })
 
 
+
+    builder.addCase("getOrderRequest",(state)=>{
+        state.loading = true
+    }).addCase("getOrderSuccess",(state,action)=>{
+        state.loading=true
+        console.log("action.payload--->",action.payload)
+        state.orders=action.payload
+    })
+    .addCase("getOrderFail",(state,action)=>{
+        state.loading=true
+        state.error=action.payload
+    })
+
+
     
 
     builder.addCase("updateProfileRequest",(state)=>{

@@ -15,6 +15,7 @@ export default function OrderItem({
     loading,
     i=0,
 }) {
+  console.log("order on",orderedOn)
   return (
     <View style={{
         ...styles.container,
@@ -24,9 +25,9 @@ export default function OrderItem({
         ID = #{id}
       </Text>
 
-      <TextBox title={"Adress"} value={address} i={i} />
-      <TextBox title={"Ordered On"} value={orderedOn} i={i} />
-      <TextBox title={"Price"} value={price} i={i} />
+      <TextBox title={"Adress"} value={address} i={i}/>
+      <TextBox title={"Ordered On"} value={orderedOn} i={i}  />
+      <TextBox title={"Price"} value={price} i={i} isPrice={true} />
       <TextBox title={"Status"} value={status} i={i} />
       <TextBox title={"PaymentMethod"} value={paymentMethod} i={i} />
       {admin && (
@@ -51,17 +52,16 @@ export default function OrderItem({
   )
 }
 
-const TextBox=({title,value,i})=>
+const TextBox=({title,value,i,isPrice})=>
     <Text 
     style={{
         marginVertical:6,
-        color: colors.color1
-        // color: i %2 === 0 ?colors.color2:colors.color3
+        // color: colors.color1
+        color: i %2 === 0 ?colors.color2:colors.color3
     }}
     >
         <Text style={{fontWeight:"900"}}>{title}-</Text>
-        $
-        {value}
+        {value} {isPrice?'VNĐ':null} 
     </Text>
 
 

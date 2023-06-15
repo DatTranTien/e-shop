@@ -6,26 +6,55 @@ import Loader from '../../components/Loader'
 import { Avatar, Button, TextInput } from 'react-native-paper'
 import { inputOptions } from '../ForgetPassword'
 import ImageCard from '../../components/ImageCard'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
+import { deleteImageProduct, getDetailProduct, updateImageProduct } from '../../redux/actions/productAction'
+import mime from 'mime'
 
 export default function ProductImages({ route, navigation }) {
     console.log("route------>", route.params.images)
     const [images] = useState(route.params.images)
     const [productId] = useState(route.params.id)
-    const [image, setImage] = useState(null)
     const [imageChanged, setImageChanged] = useState(false)
     const loading = false
     const deleteHandler = () => {
-
+        dispatch(deleteImageProduct(route.params.id,callSuccess,callError))
     }
     const submitHandler = () => {
-
+        const myForm = new FormData()
+        myForm.append("file",{
+            uri:route.params.pic,
+            type: mime.getType(route.params.pic),
+            name:route.params.pic.split("/").pop()
+        })
+        dispatch(updateImageProduct(myForm,route.params.id,callSuccess,callError))
     }
-    useEffect(() => {
-        if (route.params?.image) {
-          setImage(route.params.image)
-          setImageChanged(true)
+    // const {product}= useSelector((state)=>state.product)
+    const callSuccess=(message)=>{
+        Toast.show({
+          type:"success",
+          text1:message
+        })
+        navigation.navigate("profile")
+       }
+       const callError=(message)=>{
+        Toast.show({
+          type:"error",
+          text1:message
+        })
+       }
+    const dispatch=useDispatch()
+    // useFocusEffect(
+    //   React.useCallback(() => {
+    //     dispatch(getDetailProduct(route.params.id))
+    //   }, [])
+    // );
+    useEffect(()=>{
+        if (route.params.pic) {
+            setImageChanged(true)
         }
-        }, [route.params])
+    },[route.params.pic])
     return (
         <View style={{ ...defaultStyle,backgroundColor:colors.color5 }}>
             <Header back={true} />
@@ -73,14 +102,14 @@ export default function ProductImages({ route, navigation }) {
                         borderWidth:2,
                         borderColor:colors.color1
                     }}
-                    source={{ uri: `${route.params.images}` }}
+                    source={{ uri: `${route.params.pic}` }}
                 />
                 <View
                     style={{
                         justifyContent: "center",
                         flexDirection: "row",
                     }}>
-                    <TouchableOpacity onPress={() => navigation.navigate("camera", { updateProduct: true })}>
+                    <TouchableOpacity onPress={() => navigation.navigate("camera", { updateProduct: true,id:route.params.id,images:route.params.images })}>
                         <Avatar.Icon
                             icon={"camera"}
                             style={{
@@ -95,14 +124,14 @@ export default function ProductImages({ route, navigation }) {
                 <Button
                     style={{
                         backgroundColor: colors.color1,
-                        padding: 6
+                        padding: 6,
+                        opacity:!imageChanged?0.5:1
                     }}
-                    textColor={colors.color2}
                     loading={loading}
                     onPress={submitHandler}
                     disabled={!imageChanged}
                 >
-                    Add
+                   <Text style={{color:colors.color2}}> Add</Text>
                 </Button>
             </View>
         </View>

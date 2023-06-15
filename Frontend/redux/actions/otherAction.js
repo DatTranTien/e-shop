@@ -124,6 +124,32 @@ export const paymentOrder = (
         })
     }
 }
+export const getOrders = ()=>async(dispatch)=>{
+    
+    try {
+        dispatch({
+            type:"getOrderRequest"
+        })
+
+    const {data}= await axios.get(`${server}/order/my`,
+    {
+        headers:{
+            "Content-Type":"application/json"
+        },
+        withCredentials:true
+    })
+
+    dispatch({
+        type: "getOrderSuccess",
+        payload:data.orders
+    })
+    } catch (error) {
+        dispatch({
+            type: "getOrderFail",
+            payload:error.response.data.message
+        })
+    }
+}
 
 export const paymentOrderOnline = (
     totalAmount
@@ -156,9 +182,6 @@ export const paymentOrderOnline = (
     if (presentSheet.error) {
         return Toast.show({type: "error",text1: presentSheet.error.message})
     }
-
-
-
     const {paymentIntent}=await stripe.retrievePaymentIntent(client_secret)
 if (paymentIntent.status==="Succeeded") {
     // console.log(paymentIntent)

@@ -5,13 +5,24 @@ import Loader from '../../components/Loader'
 import Header from '../../components/Header'
 import { Headline } from 'react-native-paper'
 import OrderItem from '../../components/OrderItem'
-import { orders } from '../Orders'
+import { useFocusEffect } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import { getOrders } from '../../redux/actions/otherAction'
 
 export default function AdminOrders() {
     const loading=false
     const processOrderLoading = false
     const updateHandler=()=>{
     }
+    const {orders} = useSelector(
+      (state)=>state.other
+    )
+    const dispatch=useDispatch()
+    useFocusEffect(
+      React.useCallback(() => {
+        dispatch(getOrders())
+      }, [])
+    );
   return (
     <View style={{...defaultStyle}}>
        <Header back={true} />
@@ -37,7 +48,7 @@ export default function AdminOrders() {
         price={item.totalAmount}
         status={item.orderStatus}
         paymentMethod={item.paymentMethod}
-        orderedOn={item.createdAt.split("T")[0]}
+        orderedOn={item.createAt.split("T")[0]}
         address={`${item.shippingInfo.address}`}
         admin={true}
         updateHandler={updateHandler}

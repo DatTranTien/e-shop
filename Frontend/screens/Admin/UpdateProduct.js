@@ -6,12 +6,16 @@ import Loader from '../../components/Loader'
 import { Button, TextInput } from 'react-native-paper'
 import { inputOptions } from '../ForgetPassword'
 import SelectComponent from '../../components/SelectComponent'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
+import { getDetailProduct, updateProduct } from '../../redux/actions/productAction'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 export default function UpdateProduct({navigation,route}) {
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
-    const [price, setPrice] = useState("")
-    const [stock, setStock] = useState("")
+    const [name, setName] = useState(route.params.name)
+    const [description, setDescription] = useState(route.params.description)
+    const [price, setPrice] = useState(route.params.price)
+    const [stock, setStock] = useState(route.params.stock)
     const [category, setCategory] = useState("")
     const [categoryID, setCategoryID] = useState("")
     const [categories, setCategories] = useState([
@@ -23,19 +27,38 @@ export default function UpdateProduct({navigation,route}) {
     const [visible, setVisible] = useState(false)
     const loading=false
     const loadingOther=false
-    const images=[
-        {
-            _id:"adasd1",
-            url:"https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg",
-        },
-        {
-            _id:"adasd2",
-            url:"https://campustechnology.com/-/media/EDU/CampusTechnology/2019-Images/20191209online.jpg",
-        }
-    ]
-    const submitHandler =()=>{
 
+    const callSuccess=(message)=>{
+        Toast.show({
+          type:"success",
+          text1:message
+        })
+        navigation.goBack()
+       }
+       const callError=(message)=>{
+        Toast.show({
+          type:"error",
+          text1:message
+        })
+       }
+  
+    const submitHandler =()=>{
+        const myForm = new FormData()
+        myForm.append("name",name)
+      myForm.append("description",description)
+      myForm.append("price",price)
+      myForm.append("stock",stock)
+        dispatch(updateProduct(myForm,route.params.id,callSuccess,callError))
     }
+
+    const {product}= useSelector((state)=>state.product)
+
+    const dispatch=useDispatch()
+    useFocusEffect(
+      React.useCallback(() => {
+        dispatch(getDetailProduct(route.params.id))
+      }, [])
+    );
   return (
     <>
     <View style={{...defaultStyle}}>
@@ -55,13 +78,14 @@ backgroundColor:colors.color3
 
     <View style={{
         justifyContent:"center",
-        height:650
+        height:550,
     }}>
         <Button 
         onPress={()=>navigation.navigate("productimages",{id:route.params.id,
-            images
+            images: product.images
         })}
-        textColor={colors.color1}
+        style={{backgroundColor:colors.color1,marginBottom:15}}
+        textColor={colors.color2}
         > Manage Images
         </Button>
 
