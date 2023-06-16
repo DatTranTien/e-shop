@@ -21,7 +21,7 @@ export default function CameraComponent({navigation,route}) {
       quality:1
     })
     if (route.params?.newProduct) 
-      return navigation.navigate("newProduct",{
+      return navigation.navigate("newproduct",{
         image:data.uri
       })
     if (route.params?.updateProduct)

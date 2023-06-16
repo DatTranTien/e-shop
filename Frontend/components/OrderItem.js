@@ -15,7 +15,6 @@ export default function OrderItem({
     loading,
     i=0,
 }) {
-  console.log("order on",orderedOn)
   return (
     <View style={{
         ...styles.container,

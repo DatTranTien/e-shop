@@ -31,6 +31,16 @@ export const productReducer= createReducer({
         state.product=action.payload
     })
 
+    builder.addCase("newProductRequest",(state)=>{
+        state.loading = true
+    }).addCase("newProductSuccess",(state,action)=>{
+        state.loading=true
+        state.message=action.payload.message
+    })
+    .addCase("newProductFail",(state,action)=>{
+        state.loading=true
+        state.error=action.payload
+    })
 
 
     .addCase("updateImageProductRequest",(state,action)=>{

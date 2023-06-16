@@ -4,6 +4,9 @@ import { colors, defaultStyle, inputStyling } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { useDispatch } from 'react-redux'
+import { resetPass } from '../redux/actions/userAction'
 
 export default function Verify({navigation}) {
   const [OTP, setOTP] = useState("")
@@ -14,6 +17,20 @@ export default function Verify({navigation}) {
     mode:"outlined",
     activeOutlineColor:colors.color1
   }
+  const dispatch=useDispatch()
+  const callSuccess=(message)=>{
+    Toast.show({
+      type:"success",
+      text1:message
+    })
+    navigation.navigate("login")
+   }
+   const callError=(message)=>{
+    Toast.show({
+      type:"error",
+      text1:message
+    })
+   }
   return (
     <View style={[defaultStyle,{backgroundColor:colors.color2}]}>
       <View style={{marginBottom:20}}>
@@ -29,13 +46,14 @@ export default function Verify({navigation}) {
         <TextInput style={{...imputOptions,marginTop:15,marginBottom:15}} 
         placeholder="Reset"
         keyboardType="email-address"
+        secureTextEntry
         value={reset}
         onChangeText={setReset}
         />
 
 
 
-        <TouchableOpacity onPress={()=>navigate.navigate("confirmoder")}>
+        <TouchableOpacity onPress={()=>dispatch(resetPass(OTP,reset,callSuccess,callError))}>
         <Button
         disabled={OTP==""|| reset == ""}
         textColor={colors.color3}

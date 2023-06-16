@@ -38,11 +38,12 @@ export default function Login({navigation}) {
       dispatch({
         type:"clearMessage"
       })
-    }else{
-      Toast.show({
-        type:"error",
-        text1:error
-      })
+    }
+    else{
+      // Toast.show({
+      //   type:"error",
+      //   text1:error
+      // })
       dispatch({
         type:"clearError"
       })
@@ -62,6 +63,7 @@ export default function Login({navigation}) {
         />
         <TextInput style={{...imputOptions,marginTop:15}} 
         placeholder="Password"
+        secureTextEntry
         value={pass}
         onChangeText={setPass}
         />

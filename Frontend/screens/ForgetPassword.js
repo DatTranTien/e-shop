@@ -4,6 +4,9 @@ import { colors, defaultStyle, inputStyling } from '../styles/styles'
 import { Button, TextInput } from 'react-native-paper'
 import Footer from '../components/Footer'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
+import { forgetPassword } from '../redux/actions/userAction'
 
 export const inputOptions={
   style: inputStyling,
@@ -12,8 +15,21 @@ export const inputOptions={
 }
 export default function ForgetPassword({navigation}) {
   const [email, setEmail] = useState("")
-  const [pass, setPass] = useState("")
   const navigate =useNavigation() 
+  const dispatch=useDispatch()
+  const callSuccess=(message)=>{
+    Toast.show({
+      type:"success",
+      text1:message
+    })
+    navigation.navigate("verify")
+   }
+   const callError=(message)=>{
+    Toast.show({
+      type:"error",
+      text1:message
+    })
+   }
 
   return (
     <View style={[defaultStyle,{backgroundColor:colors.color2}]}>
@@ -28,13 +44,14 @@ export default function ForgetPassword({navigation}) {
         onChangeText={setEmail}
         />
 
-        <TouchableOpacity onPress={()=>navigate.navigate("verify")}>
+        <TouchableOpacity onPress={()=>dispatch(forgetPassword(email,callSuccess,callError))}>
         <Button
-        disabled={email==""|| password == ""}
+        disabled={email==""}
         textColor={colors.color3}
         style={{
           backgroundColor:colors.color1,
           borderRadius:100,
+          opacity: email?1:0.5
           // padding:5,
         }}>
          <Text style={{

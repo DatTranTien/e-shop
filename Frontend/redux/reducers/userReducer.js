@@ -2,12 +2,35 @@ import {createReducer} from '@reduxjs/toolkit'
 export const userReducer= createReducer({loading:false,isAuthenticated:false},(builder)=>{
     builder.addCase("loginRequest",(state)=>{
         state.loading = true
-    }).addCase("loadUserRequest",(state,action)=>{
+    })
+    .addCase("loadUserRequest",(state,action)=>{
         state.loading=true
     }).addCase("logoutRequest",(state,action)=>{
         state.loading=true
     }).addCase("registerRequest",(state,action)=>{
         state.loading=true
+    })
+
+    .addCase("forgetPassRequest",(state,action)=>{
+        state.loading=true
+    }).addCase("forgetPassSuccess",(state,action)=>{
+        state.loading=true
+        state.message = action.payload
+    }).addCase("forgetPassFail",(state,action)=>{
+        state.loading=true
+        state.error = action.payload
+    })
+
+
+
+    .addCase("resetPassRequest",(state,action)=>{
+        state.loading=true
+    }).addCase("resetPassSuccess",(state,action)=>{
+        state.loading=true
+        state.message = action.payload
+    }).addCase("resetPassFail",(state,action)=>{
+        state.loading=true
+        state.error = action.payload
     })
 
 

@@ -14,8 +14,6 @@ export default function Cart() {
   const navigate=useNavigation()
   const {cartItems}=useSelector((state)=>state.cart)
 
-  console.log("check cartItems--->",cartItems)
-
   let totalItem=0;
   let totalMoney=0;
           cartItems.forEach(element => {

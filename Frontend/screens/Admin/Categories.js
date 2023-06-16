@@ -1,38 +1,40 @@
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { colors, defaultStyle } from '../../styles/styles'
 import Header from '../../components/Header'
 import { Avatar, Button } from 'react-native-paper'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCategory } from '../../redux/actions/categoryAction'
+import { deleteCategory, newCategory } from '../../redux/actions/otherAction'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
-const categories = [
-    {
-        name:"Laptop",
-        _id:"Adaksdfsd1"
-    },
-    {
-        name:"mac",
-        _id:"Adaksdfsd2"
-    },
-    {
-        name:"win",
-        _id:"Adaksdfsd3"
-    },
-    {
-        name:"PC",
-        _id:"Adaksdfsd4"
-    },
-    {
-        name:"Car",
-        _id:"Adaksdfsd5"
-    },
-]
 export default function Categories() {
     const [category, setCategory] = useState("")
-    const deleteHandler=(id)=>{
+    const {categories} = useSelector(
+        (state)=>state.categories
+      )
+      const dispatch = useDispatch()
+      useEffect(()=>{
+        dispatch(getCategory())
+      })
 
+      const callSuccess=(message)=>{
+        Toast.show({
+          type:"success",
+          text1:message
+        })
+       }
+       const callError=(message)=>{
+        Toast.show({
+          type:"error",
+          text1:message
+        })
+       }
+    const deleteHandler=(id)=>{
+        dispatch(deleteCategory(id,callSuccess,callError))
     }
     const submitHandler=()=>{
-
+        dispatch(newCategory(category,callSuccess,callError))
     }
     const loading = false
   return (
@@ -55,7 +57,7 @@ export default function Categories() {
             }}>
                 {categories?.map((i)=>(
                     <CategoryCard
-                    name={i.name}
+                    name={i.category}
                     id={i._id}
                     key={i._id}
                     deleteHandler={deleteHandler}
@@ -65,7 +67,7 @@ export default function Categories() {
         </ScrollView>
 
         <View style={styles.container}>
-        <TextInput style={{height:40,borderRadius:10,marginTop:10}} 
+        <TextInput style={{height:40,borderRadius:10,marginTop:10,borderWidth:0.5,padding:10}} 
         placeholder="Categories"
         keyboardType="email-address"
         value={category}
@@ -116,6 +118,6 @@ const styles = StyleSheet.create({
         padding:20,
         elevation:10,
         borderRadius:10,
-        backgroundColor:colors.color3
+        backgroundColor:colors.color2
     }
 })

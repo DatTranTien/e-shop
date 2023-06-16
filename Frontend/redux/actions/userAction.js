@@ -55,6 +55,67 @@ export const login = (email,password)=>async(dispatch)=>{
         })
     }
 }
+export const forgetPassword = (email,callSuccess,callError)=>async(dispatch)=>{
+    
+    try {
+        dispatch({
+            type:"forgetPassRequest"
+        })
+
+    const {data}= await axios.post(`${server}/user/forgetPassword`,{
+        email
+    },
+    {
+        headers:{
+            "Content-Type":"application/json"
+        },
+        withCredentials:true
+    })
+
+    dispatch({
+        type: "forgetPassSuccess",
+        payload: data.message
+    })
+    callSuccess(data.message)
+    } catch (error) {
+        dispatch({
+            type: "forgetPassFail",
+            payload: error.response.data.message
+        })
+        callError(error.response.data.message)
+    }
+}
+export const resetPass = (otp,newPassword,callSuccess,callError)=>async(dispatch)=>{
+    
+    try {
+        dispatch({
+            type:"resetPassRequest"
+        })
+
+    const {data}= await axios.put(`${server}/user/forgetPassword`,{
+        otp,
+        newPassword
+    },
+    {
+        headers:{
+            "Content-Type":"application/json"
+        },
+        withCredentials:true
+    })
+
+    dispatch({
+        type: "resetPassSuccess",
+        payload: data.message
+    })
+    callSuccess(data.message)
+    } catch (error) {
+        dispatch({
+            type: "resetPassFail",
+            payload: error.response.data.message
+        })
+        callError(error.response.data.message)
+    }
+}
 export const loadUser = ()=>async(dispatch)=>{
     
     try {
@@ -78,7 +139,7 @@ export const loadUser = ()=>async(dispatch)=>{
         })
     }
 }
-export const logout = ()=>async(dispatch)=>{
+export const logout = (callSuccess,callError)=>async(dispatch)=>{
     
     try {
         dispatch({

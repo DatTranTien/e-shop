@@ -150,6 +150,63 @@ export const getOrders = ()=>async(dispatch)=>{
         })
     }
 }
+export const deleteCategory = (id,callSuccess,callError)=>async(dispatch)=>{
+    
+    try {
+        dispatch({
+            type:"deleteCategoryRequest"
+        })
+
+    const {data}= await axios.delete(`${server}/product/deleteCategory/${id}`,
+    {
+        headers:{
+            "Content-Type":"application/json"
+        },
+        withCredentials:true
+    })
+
+    dispatch({
+        type: "deleteCategorySuccess",
+        payload:data.message
+    })
+    callSuccess(data.message)
+    } catch (error) {
+        dispatch({
+            type: "deleteCategoryFail",
+            payload:error.response.data.message
+        })
+        callError(error.response.data.message)
+    }
+}
+export const newCategory = (category,callSuccess,callError)=>async(dispatch)=>{
+    try {
+        dispatch({
+            type:"newCategoryRequest"
+        })
+
+    const {data}= await axios.post(`${server}/product/createNewCategory`,{
+        category
+    },
+    {
+        headers:{
+            "Content-Type":"application/json"
+        },
+        withCredentials:true
+    })
+
+    dispatch({
+        type: "newCategorySuccess",
+        payload:data.message
+    })
+    callSuccess(data.message)
+    } catch (error) {
+        dispatch({
+            type: "newCategoryFail",
+            payload:error.response.data.message
+        })
+        callError(error.response.data.message)
+    }
+}
 
 export const paymentOrderOnline = (
     totalAmount
@@ -184,14 +241,8 @@ export const paymentOrderOnline = (
     }
     const {paymentIntent}=await stripe.retrievePaymentIntent(client_secret)
 if (paymentIntent.status==="Succeeded") {
-    // console.log(paymentIntent)
     codeHandle({id: paymentIntent.id,status: paymentIntent.status})
 }
-
-    // dispatch({
-    //     type: "orderOnlineSuccess",
-    //     payload:{message:data.message,callSuccess:callSuccess(data.message)}
-    // })
     } catch (error) {
         dispatch({
             type: "orderOnlineFail",

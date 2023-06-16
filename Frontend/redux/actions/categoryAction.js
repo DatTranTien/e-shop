@@ -14,7 +14,6 @@ export const getCategory = ()=>async(dispatch)=>{
     {
         withCredentials:true
     })
-    console.log("chec adata--->",data)
 
     dispatch({
         type: "getCategorySuccess",

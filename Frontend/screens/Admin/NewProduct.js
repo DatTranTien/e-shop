@@ -6,6 +6,10 @@ import Loader from '../../components/Loader'
 import { Avatar, Button, TextInput } from 'react-native-paper'
 import { inputOptions } from '../ForgetPassword'
 import SelectComponent from '../../components/SelectComponent'
+import { useDispatch } from 'react-redux'
+import { newProduct } from '../../redux/actions/productAction'
+import mime from 'mime'
+import { Toast } from 'react-native-toast-message/lib/src/Toast'
 
 export default function NewProduct({navigation,route}) {
     const [name, setName] = useState("")
@@ -21,10 +25,36 @@ export default function NewProduct({navigation,route}) {
             category:"hello world!"
         }
     ])
+    const dispatch=useDispatch()
     const [visible, setVisible] = useState(false)
     const loading=false
-    const submitHandler =()=>{
 
+
+    const callSuccess=(message)=>{
+      Toast.show({
+        type:"success",
+        text1:message
+      })
+      navigation.goBack()
+     }
+     const callError=(message)=>{
+      Toast.show({
+        type:"error",
+        text1:message
+      })
+     }
+    const submitHandler =()=>{
+      const myForm = new FormData()
+      myForm.append("name",name)
+    myForm.append("description",description)
+    myForm.append("price",price)
+    myForm.append("stock",stock)
+    myForm.append("file",{
+      uri:image,
+      type: mime.getType(image),
+      name:image.split("/").pop()
+  })
+      dispatch(newProduct(myForm,callSuccess,callError))
     }
     useEffect(() => {
     if (route.params?.image) {

@@ -28,7 +28,13 @@ export default function Profile({navigation,route}) {
           text1:message
         })
         dispatch(loadUser())
-        // navigation.navigate("profile")
+       }
+      const callSuccessLogout=(message)=>{
+        Toast.show({
+          type:"success",
+          text1:message
+        })
+        navigation.navigate("login")
        }
        const callError=(message)=>{
         Toast.show({
@@ -37,7 +43,7 @@ export default function Profile({navigation,route}) {
         })
        }
 const logoutHandler=()=>{
-    dispatch(logout())
+    dispatch(logout(callSuccessLogout,callError))
 }
 useEffect(()=>{
     dispatch(loadUser())

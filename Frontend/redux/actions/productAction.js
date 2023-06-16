@@ -161,7 +161,6 @@ export const updateProduct = (form,id,callSuccess,callError)=>async(dispatch)=>{
         },
         withCredentials:true
     })
-    console.log("check dât------>",data)
 
     dispatch({
         type: "updateProductSuccess",
@@ -171,6 +170,34 @@ export const updateProduct = (form,id,callSuccess,callError)=>async(dispatch)=>{
     } catch (error) {
         dispatch({
             type: "updateProductFail",
+            payload:error.response.data.message
+        })
+        callError(error.response.data.message)
+    }
+}
+export const newProduct = (form,callSuccess,callError)=>async(dispatch)=>{
+    
+    try {
+        dispatch({
+            type:"newProductRequest"
+        })
+
+    const {data}= await axios.post(`${server}/product/createNewProduct`,form,
+    {
+        headers:{
+            "Content-Type":"multipart/form-data"
+        },
+        withCredentials:true
+    })
+
+    dispatch({
+        type: "newProductSuccess",
+        payload:data.message
+    })
+    callSuccess(data.message)
+    } catch (error) {
+        dispatch({
+            type: "newProductFail",
             payload:error.response.data.message
         })
         callError(error.response.data.message)
